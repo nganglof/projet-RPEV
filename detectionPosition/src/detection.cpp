@@ -86,6 +86,27 @@ void proc_performance(Scene* scene){
 */
 }
 
-int main(int argc, char** argv){
-  //  TO DO
+void process(const char* imsname)
+{
+	Mat imsimg = imread(imsname,0);
+
+	imshow("Display window ims",imsimg);
+	waitKey(0);
+
+}
+
+void usage (const char *s)
+{
+  std::cerr<<"Usage: "<<s<<" im-boundary ims imd\n"<<std::endl;
+  exit(EXIT_FAILURE);
+}
+
+
+#define param 1
+int main( int argc, char* argv[] )
+{
+  if(argc != (param+1))
+    usage(argv[0]);
+  process(argv[1]);
+  return EXIT_SUCCESS;  
 }

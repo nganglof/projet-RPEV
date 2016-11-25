@@ -1,5 +1,5 @@
-#ifndef BORDER_H
-#define BORDER_H
+#ifndef __BORDER_HPP__
+#define __BORDER_HPP__
 
 #include <iostream>
 #include <cstdlib>
@@ -20,7 +20,7 @@ private:
 public:
   Border();
   void points2border(Vec2f p1, Vec2f p2);  // computes 'direction', 'sign', 'A' and 'B' by means of 2 points 'p1' and 'p2' on the line
-  bool is_outside(Vect2f p) const; // true if the point 'p' doesn't respect the inequation of a border
-}
+  bool is_outside(Vec2f p) const; // true if the point 'p' doesn't respect the inequation of a border
+};
 
 #endif
