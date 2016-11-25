@@ -4,10 +4,6 @@ Scene::Scene(){
   // TO DO
 }
 
-Scene::~Scene(){
-  // TO DO
-}
-
 void Scene::compute_scale(Mat img, float dist){
     // TO DO
 }
