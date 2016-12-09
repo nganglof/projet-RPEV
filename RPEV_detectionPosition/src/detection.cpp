@@ -11,7 +11,7 @@ using namespace cv;
 
 /**********************************
 TO CONSIDER :
-- Scene::function() to edit Borders, according to the diameter of a robot (need 'scale') OR Border::is_outside() must deal with it
+- Scene::function() to edit Borders, according to the diameter of a robot (need 'scale') OR Border::is_outside() must cope with it
 - Scene::function() to tell whether the Borders delimitate a closed space or not
 - step 2) of proc_inipos()
 - write functions for step 3) of proc_performance
@@ -108,5 +108,5 @@ int main( int argc, char* argv[] )
   if(argc != (param+1))
     usage(argv[0]);
   process(argv[1]);
-  return EXIT_SUCCESS;  
+  return EXIT_SUCCESS;
 }
