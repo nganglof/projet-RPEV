@@ -1,4 +1,6 @@
-#include "detection.hpp"
+#include <iostream>
+#include <cstdlib>
+#include <opencv2/opencv.hpp>
 
 using namespace cv;
 using namespace std;
@@ -37,7 +39,7 @@ _add(int p, int r, int* roots)
 }
 
 void
-labeling(const char* imsname, const char* regname, const char* colorname)
+process(const char* imsname, const char* regname, const char* colorname)
 {
   Mat ims = imread(imsname);
   Mat imreg, imcolor;
@@ -115,4 +117,21 @@ labeling(const char* imsname, const char* regname, const char* colorname)
   cvtColor(imcolor, imcolor, CV_HSV2BGR);
   imwrite(colorname,imcolor);
   delete [] roots;
+}
+
+void
+usage (const char *s)
+{
+  std::cerr<<"Usage: "<<s<<"imsname regname colorname\n"<<std::endl;
+  exit(EXIT_FAILURE);
+}
+
+#define param 3
+int
+main( int argc, char* argv[] )
+{
+  if(argc != (param+1))
+    usage(argv[0]);
+  process(argv[1], argv[2], argv[3]);
+  return EXIT_SUCCESS;
 }
