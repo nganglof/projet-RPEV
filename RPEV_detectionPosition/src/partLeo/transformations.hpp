@@ -7,36 +7,38 @@
 
 using namespace cv;
 
-
-
 /*************************************************************************************
                              TRANSFORMATION FUNCTIONS
 **************************************************************************************/
 
-// creates a square image of side 2*halfsize+1 that represents a white disk on black background ; saves it as 'diskname'
-void
-makedisk(const int halfsize, const char* diskname);
+// creates a square image of side 2*halfsize+1 that represents a white disk on black background
+Mat
+makedisk(const int halfsize);
 
-// paints pixels in 'ims' black or white, by comparing every pixel's value with the 'threshold' value ; saves the result as 'imdname'
-void
-thresholding(const int threshold, const char* imsname, const char* imdname);
+// creates a square image of side 2*halfsize+1 that represents a white cross on black background
+Mat
+makecross(const int halfsize, const int thickness);
 
-// erodes 'ims' with the given 'disk', saves the result as 'imdname'
-void
-erosion(const char* diskname, const char* imsname, const char* imdname);
+// paints pixels in 'ims' black or white, by comparing every pixel's value with the 'threshold' value
+Mat
+thresholding(const Mat ims, const int threshold);
 
-// dilates 'ims' with the given 'disk', saves the result as 'imdname'
-void
-dilatation(const char* diskname, const char* imsname, const char* imdname);
+// erodes 'ims' with the given 'disk'
+Mat
+erosion(Mat ims, const int level);
+
+// dilates 'ims' with the given 'disk'
+Mat
+dilatation(Mat ims, const int level);
 
 // superimposes non-black elements in 'imsabove' on top of 'imsbelow', after coloring them in green
-void
-superimpose(const char* imsabovename, const char* imsbelowname, const char* imdname);
+Mat
+draw_on_top(Mat drawing, Mat ims, int centerx, int centery, int R, int G, int B);
 
 
 
 /*************************************************************************************
-      SUBFUNCTIONS OF TRANSFORMATION FUNCTIONS - SHOULD NOT BE USED ELSEWHERE !
+                  SUBFUNCTIONS USED IN transformations.cpp ONLY
 **************************************************************************************/
 
 // erodes or dilates 'ims' with the given 'disk', depending on the given 'compare' function : see minimum() and maximum()

@@ -3,8 +3,8 @@
 using namespace cv;
 using namespace std;
 
-void
-makedisk(const int halfsize, const char* diskname)
+Mat
+makedisk(const int halfsize)
 {
     Mat disk = Mat(2*halfsize+1, 2*halfsize+1, CV_8UC1);
 
@@ -14,83 +14,91 @@ makedisk(const int halfsize, const char* diskname)
         {
             int x = i - halfsize;
             int y = j - halfsize;
-            disk.at<unsigned char>(i,j) = (x * x + y * y <= halfsize * halfsize)?255:0;
+            disk.at<unsigned char>(i,j) = (x * x + y * y <= halfsize * halfsize) ? 255 : 0;
         }
     }
-    imwrite(diskname, disk);
+    return(disk);
 }
 
-void
-thresholding(const int threshold, const char* imsname, const char* imdname)
+Mat
+makecross(const int halfsize, const int thickness)
 {
-  Mat ims = imread(imsname, 0);
+    Mat cross = Mat(2*halfsize+1, 2*halfsize+1, CV_8UC1);
 
-  for (int i = 0; i < ims.rows; ++i)
-  {
-    for (int j = 0; j < ims.cols; ++j)
+    for (int i = 0; i < cross.rows; ++i)
     {
-      uchar value = ims.at<uchar>(i,j);
-      ims.at<uchar>(i,j) = (value >= threshold) ? 255 : 0;
+        for (int j = 0; j < cross.cols; ++j)
+        {
+            cross.at<unsigned char>(i,j) =
+            (((i<=halfsize+thickness/2) && (i>=halfsize-thickness/2)) || ((j<=halfsize+thickness/2) && (j>=halfsize-thickness/2))) ? 255 : 0;
+        }
+    }
+    return(cross);
+}
+
+Mat
+thresholding(const Mat ims, const int threshold)
+{
+  Mat imd = Mat(ims.size(), CV_8UC1);
+  ims.copyTo(imd);
+
+  for (int i = 0; i < imd.rows; ++i)
+  {
+    for (int j = 0; j < imd.cols; ++j)
+    {
+      uchar value = imd.at<uchar>(i,j);
+      imd.at<uchar>(i,j) = (value >= threshold) ? 255 : 0;
     }
   }
-  imwrite(imdname, ims);
+  return(imd);
 }
 
-void
-erosion(const char* diskname, const char* imsname, const char* imdname)
+Mat
+erosion(Mat ims, const int level)
 {
-  Mat ims = imread(imsname, 0);
-  Mat imd;
-  imd =  Mat(ims.size(), CV_8UC1);
+  Mat imd = Mat(ims.size(), CV_8UC1);
 
-  Mat disk = imread(diskname, 0);
+  Mat disk = makedisk(level);
 
   morph(disk, ims, imd, minimum);
 
-  imwrite(imdname, imd);
+  return(imd);
 }
 
-void
-dilatation(const char* diskname, const char* imsname, const char* imdname)
+Mat
+dilatation(Mat ims, const int level)
 {
-  Mat ims = imread(imsname, 0);
-  Mat imd;
-  imd =  Mat(ims.size(), CV_8UC1);
+  Mat imd =  Mat(ims.size(), CV_8UC1);
 
-  Mat disk = imread(diskname, 0);
+  Mat disk = makedisk(level);
 
   morph(disk, ims, imd, maximum);
 
-  imwrite(imdname, imd);
+  return(imd);
 }
 
-void
-superimpose(const char* imsabovename, const char* imsbelowname, const char* imdname)
+Mat
+draw_on_top(Mat drawing, Mat ims, int centerx, int centery, int R, int G, int B)
 {
-  Mat imsabove = imread(imsabovename, 0);
-  Mat imsbelow = imread(imsbelowname, 1);
+  Mat imd = Mat(ims.size(), CV_8UC1);
+  ims.copyTo(imd);
 
-  if(imsabove.size() == imsbelow.size())
+  for (int i = 0; i < drawing.rows; ++i)
   {
-    for (int i = 0; i < imsbelow.rows; ++i)
+    for (int j = 0; j < drawing.cols; ++j)
     {
-      for (int j = 0; j < imsbelow.cols; ++j)
+      if(drawing.at<uchar>(i,j) != 0 && centerx-(drawing.cols/2)+j > 0 && centerx-(drawing.cols/2)+j < ims.cols && centery-(drawing.rows/2)+i > 0 && centery-(drawing.rows/2)+i < ims.rows)
       {
-        if(imsabove.at<uchar>(i,j) != 0)
-        {
-          imsbelow.at<Vec3b>(i,j) = Vec3b(0,200,0);
-        }
+        imd.at<Vec3b>(centery-(drawing.rows/2)+i,centerx-(drawing.cols/2)+j) = Vec3b(B,G,R);
       }
     }
   }
-
-  imwrite(imdname, imsbelow);
+  return(imd);
 }
 
 void
 morph(Mat disk, Mat ims, Mat imd, void (*compare)(uchar, uchar*))
 {
-
   for (int i = 0; i < ims.rows; ++i)
   {
       for (int j = 0; j < ims.cols; ++j)

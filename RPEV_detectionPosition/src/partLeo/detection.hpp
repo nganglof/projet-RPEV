@@ -4,24 +4,30 @@
 #include <iostream>
 #include <cstdlib>
 #include <opencv2/opencv.hpp>
+#include <vector>
 
 #include "transformations.hpp"
 
-
+using namespace cv;
 
 /*************************************************************************************
-                             DETECTION FUNCTIONS
+                              DETECTION FUNCTIONS
 **************************************************************************************/
 
-// labels areas in 'ims' according to their color in a binary image, after using transformations::thresholding() for example
-// then saves an image of labeled zones as 'regname', and a colored one for visual check as 'colorname'
-void
-labeling(const char* imsname, const char* regname, const char* colorname);
+// first saves the number of convex areas in the binary image 'ims' as 'nb_leds'
+// then returns the labeled image, where every pixel in a convex area has the same value, from 0 (background) to 'nb_leds'
+Mat
+labeling(Mat ims, int* nb_leds);
 
+// returns a colored version of a labeled image 'ims', being given the number of non-background areas 'nb_leds'
+Mat
+coloring(Mat ims, const int nb_leds);
 
+Mat
+locating(Mat ims, Mat centershape, Mat robotshape, const int nb_leds);
 
 /*************************************************************************************
-         SUBFUNCTIONS OF DETECTION FUNCTIONS - SHOULD NOT BE USED ELSEWHERE !
+                    SUBFUNCTIONS USED IN detection.cpp ONLY
 **************************************************************************************/
 
 int
