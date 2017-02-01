@@ -6,6 +6,8 @@
 #include <opencv2/opencv.hpp>
 #include "metabot.hpp"
 #include "camera.hpp"
+#include "transformations.hpp"
+#include "detection.hpp"
 #include <string>
 
 using namespace std;
@@ -24,6 +26,7 @@ public:
 
     Scene(int nbMetabots);
     ~Scene();
+
 
     void resetScene();
     void showFrame();

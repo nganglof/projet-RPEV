@@ -5,12 +5,14 @@ CC = g++
 CFLAGS  = -Wall -Wextra -I$(ROOT) -I$(OPENCV)/include
 LDFLAGS = -L/usr/lib/x86_64-linux-gnu -lopencv_core -lopencv_imgproc -lopencv_highgui 
 
-execs     = detection
+execs     = main
 
 all: $(execs)
 
-detection: detection.o scene.o camera.o metabot.o
+main: main.o transformations.o detection.o scene.o camera.o metabot.o
 
+transformations.o : transformations.hpp
+detection.o : detection.hpp
 scene.o : scene.hpp
 camera.o : camera.hpp
 metabot.o : metabot.hpp
@@ -19,7 +21,7 @@ metabot.o : metabot.hpp
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 clean:
-	rm -rf *.o *~ *.png detection
+	rm -rf *.o *~ *.png main
 	clear
 
 .PHONY: all clean 

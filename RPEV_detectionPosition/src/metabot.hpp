@@ -17,14 +17,21 @@ private:
     float _posy;
     float _angle;
     int _id;
-    //Led leds[3];
+    bool _isPresent;
 
 public:
 
     Metabot( int id, float posx, float posy, float angle);
     ~Metabot();
 
+    float getPositionX();
+    float getPositionY();
+    float getAngle();
     string toString();
+    void setIsPresent(bool present);
+    bool getIsPresent();
+    float getDistance(Metabot* m);
+    void updateMetabot(float posx, float posy, float angle);
 
 };
 
