@@ -14,15 +14,20 @@ class Camera
 
 private:
 
-	CvCapture* _capture;
+    VideoCapture _capture;
+    Mat _currentFrame;
+
 
 public:
 
-  Camera();
-  ~Camera();
+    Camera();
+    ~Camera();
 
-  int initFlux();
-  IplImage* getFrame();
+    VideoCapture getVideoCapture();
+    int initFlux();
+    void getNewFrame();
+    Mat getCurrentFrame();
+    void getFlux();
 
 };
 

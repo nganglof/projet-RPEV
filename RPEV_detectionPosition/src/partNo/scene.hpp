@@ -14,24 +14,28 @@ using namespace cv;
 class Scene
 {
 
-	private:
-		Camera* _camera;
-		Vector<Metabot*> _metabots;
-		int _nbMetabots;
-		int _currentNb;
-		IplImage* _currentImage;
+private:
+    Camera* _camera;
+    Vector<Metabot*> _metabots;
+    int _nbMetabots;
+    int _currentNb;
 
-	public:
+public:
 
-		Scene(int nbMetabots);
-		~Scene();
+    Scene(int nbMetabots);
+    ~Scene();
 
-		void processNewFrame();
-
-		string getPositions();
-		void initMetabot();
-		void addMetabot(float posx, float posy);
-
+    void resetScene();
+    void showFrame();
+    void treatFrame();
+    void processNewFrame();
+    string getPositions();
+    void initMetabot();
+    void initScene();
+    void initCamera();
+    void launchCamera();
+    void addMetabot(int id, float posx, float posy, float angle);
+    bool isInit();
 
 
 };

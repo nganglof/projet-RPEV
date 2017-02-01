@@ -13,17 +13,18 @@ class Metabot
 {
 
 private:
-	float _posx;
-	float _posy;
-	int _id;
-	//Led leds[3];
+    float _posx;
+    float _posy;
+    float _angle;
+    int _id;
+    //Led leds[3];
 
 public:
 
-  Metabot( int id, float posx, float posy);
-  ~Metabot();
+    Metabot( int id, float posx, float posy, float angle);
+    ~Metabot();
 
-  string toString();
+    string toString();
 
 };
 
