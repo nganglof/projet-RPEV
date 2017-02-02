@@ -1,4 +1,5 @@
 #include "detection.hpp"
+#include "metabot.hpp"
 
 using namespace cv;
 using namespace std;
@@ -114,7 +115,7 @@ coloring(Mat ims, const int nb_leds)
 }
 
 Mat
-locating(Mat ims, Mat centershape, const int nb_leds)
+locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*> metabots)
 {
   int rows  = ims.rows;
   int cols  = ims.cols;
@@ -123,8 +124,8 @@ locating(Mat ims, Mat centershape, const int nb_leds)
   int root_max_x[nb_leds];
   int root_min_y[nb_leds];
   int root_max_y[nb_leds];
-  int root_center_x[nb_leds];
-  int root_center_y[nb_leds];
+
+  struct led leds[nb_leds];
 
   for (int root = 0; root < nb_leds; root++){
     root_min_x[root] = cols;
@@ -150,16 +151,91 @@ locating(Mat ims, Mat centershape, const int nb_leds)
     }
   }
 
-  Mat imd = Mat(ims.size(), CV_8UC3);
+  Mat imd = Mat(ims.size(), CV_8UC3, Scalar(0,0,0));
 
   for(int root = 0; root < nb_leds; root++){
-    root_center_x[root] = (root_min_x[root]+root_max_x[root])/2;
-    root_center_y[root] = (root_min_y[root]+root_max_y[root])/2;
-    imd = draw_on_top(centershape, imd, root_center_x[root], root_center_y[root], 200, 0, 0);
+    leds[root].id = root;
+    leds[root].x = (root_min_x[root]+root_max_x[root])/2;
+    leds[root].y = (root_min_y[root]+root_max_y[root])/2;
+    imd = draw_on_top(centershape, imd, leds[root].x, leds[root].y, 200, 0, 0);
+  }
+
+  struct led closest_leds[nb_leds][2];
+  float shortest_dist[nb_leds][2];
+
+  for (int i = 0; i < nb_leds; i++){
+    shortest_dist[i][0] = 1000000.0;
+    shortest_dist[i][1] = 1000000.0;
+    for (int j = 0; j < nb_leds; j++){
+      if (i!=j){
+        float distance = sqrt(pow(leds[i].x - leds[j].x , 2) + pow(leds[i].y - leds[j].y , 2));
+        if (distance < shortest_dist[i][0]){
+          shortest_dist[i][1] = shortest_dist[i][0];
+          shortest_dist[i][0] = distance;
+          closest_leds[i][1] = closest_leds[i][0];
+          closest_leds[i][0] = leds[j];
+        }
+        else if (distance < shortest_dist[i][1]){
+          shortest_dist[i][1] = distance;
+          closest_leds[i][1] = leds[j];
+        }
+      }
+    }
+  }
+
+  vector<struct ledbar> ledbars;
+
+  for (int i = 0; i < nb_leds; i++){
+    int j = 0;
+    while (j < ledbars.size() && ledbars[j].led1.id != i && ledbars[j].led2.id != i && ledbars[j].led3.id != i)
+      j++;
+    // if the LED i doesn't appear in the 'ledbars' yet
+    if (j == ledbars.size()){
+      struct ledbar newledbar;
+      if (closest_leds[closest_leds[i][0].id][0].id != i){
+        newledbar.led1 = closest_leds[i][1];
+        newledbar.led2 = closest_leds[i][0];
+        newledbar.led3 = leds[i];
+        newledbar.shortdist = shortest_dist[closest_leds[i][0].id][0];
+        newledbar.longdist = shortest_dist[i][0];
+        ledbars.push_back(newledbar);
+      }
+      else if (shortest_dist[i][1] > shortest_dist[closest_leds[i][0].id][1]){
+        newledbar.led1 = leds[i];
+        newledbar.led2 = closest_leds[i][0];
+        newledbar.led3 = closest_leds[i][1];
+        newledbar.shortdist = shortest_dist[i][0];
+        newledbar.longdist = shortest_dist[closest_leds[i][0].id][1];
+        ledbars.push_back(newledbar);
+      }
+      else {
+        newledbar.led1 = closest_leds[i][0];
+        newledbar.led2 = leds[i];
+        newledbar.led3 = closest_leds[i][1];
+        newledbar.shortdist = shortest_dist[i][0];
+        newledbar.longdist = shortest_dist[i][1];
+        ledbars.push_back(newledbar);
+      }
+    }
+  }
+
+  for (int i = 0; i < ledbars.size(); i++){
+    float posx = (ledbar[i].led1.x + ledbar[i].led3.x) / 2; // considering that the middle of the robot is at the same distance from external leds
+    float posy = (ledbar[i].led1.y + ledbar[i].led3.y) / 2; // same
+    float angle;
+    if(ledbar[i].led1.x != ledbar[i].led3.x)
+      angle = atan((ledbar[i].led1.y - ledbar[i].led3.y) / (ledbar[i].led1.x - ledbar[i].led3.x))*180/M_PI;
+    else
+      angle = (ledbar[i].led1.y > ledbar[i].led3.y) ? 90 : -90;
+    Metabot* newmetabot = new Metabot(-1, posx, posy, angle);
+    metabots.pushback(newmetabot);
   }
 
   return(imd);
 }
+
+
+
 
 int
 _find(int p, int* roots)

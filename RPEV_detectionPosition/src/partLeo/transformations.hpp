@@ -31,7 +31,7 @@ erosion(Mat ims, const int level);
 Mat
 dilatation(Mat ims, const int level);
 
-// superimposes non-black elements in 'imsabove' on top of 'imsbelow', after coloring them in green
+// returns a color image that is an overlay of non-black elements from 'drawing' over 'ims', at position ('centerx','centery'), painted in ('R','G','B')
 Mat
 draw_on_top(Mat drawing, Mat ims, int centerx, int centery, int R, int G, int B);
 

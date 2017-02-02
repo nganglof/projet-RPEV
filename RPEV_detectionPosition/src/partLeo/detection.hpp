@@ -11,6 +11,25 @@
 using namespace cv;
 
 /*************************************************************************************
+                                   STRUCTURES
+**************************************************************************************/
+struct led
+{
+  int id;
+  int x;
+  int y;
+};
+
+struct ledbar
+{
+  struct led led1;
+  float shortdist;
+  struct led led2;
+  float longdist;
+  struct led led3;
+};
+
+/*************************************************************************************
                               DETECTION FUNCTIONS
 **************************************************************************************/
 
@@ -23,8 +42,10 @@ labeling(Mat ims, int* nb_leds);
 Mat
 coloring(Mat ims, const int nb_leds);
 
+// returns an image with 'centershape' where LEDs are detected and circles around detected robots
+// saves the positions and angles of robots in the empty vector 'metabots'
 Mat
-locating(Mat ims, Mat centershape, Mat robotshape, const int nb_leds);
+locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*> metabots);
 
 /*************************************************************************************
                     SUBFUNCTIONS USED IN detection.cpp ONLY

@@ -31,7 +31,11 @@ main(int argc, char **argv){
 
   imreg = labeling(imd, nb_leds);
   imcolor = coloring(imreg, *nb_leds);
-  imcenters = locating(imreg, cross, something, *nb_leds);
+
+  Vector<Metabot*> metabots;
+  imcenters = locating(imreg, cross, something, *nb_leds, metabots);
+
+
 
   imwrite("reg.png", imreg);
   imwrite("color.png", imcolor);
