@@ -9,7 +9,8 @@ var Entity = require('../Entity');
  */
 var SupervisorTypes = {
     Simple: "Simple",
-    Boids: "Boids"
+    Boids: "Boids",
+    BoidsLeader: "BoidsLeader"
 };
 
 var exports = module.exports = {};
