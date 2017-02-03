@@ -119,10 +119,38 @@ void Scene::initScene() {
 
 void Scene::initMetabot() {
 
-    //todo part leo get position
-    addMetabot(_currentNb,(float)3.,(float)4.,(float)50.);
-    cout << ">>>> bot " << _currentNb-1 << " initialisé" << endl;
+    //todo
+/*
+    int* nb_leds = new int(0);
+    Mat frame;
+    cv::cvtColor(_camera->getCurrentFrame(), frame, cv::COLOR_BGR2GRAY);
 
+    //image processing to get a clean frame
+    Mat cross = makecross(3,3);
+    Mat imd = Mat(frame.size(), CV_8UC1);
+    imd = thresholding(frame, THRESHOLDING);
+    imd = erosion(imd, EROSION);
+    imd = dilatation(imd, DILATION);
+    Mat imreg =  Mat(imd.size(), CV_8UC1);
+    Mat imcolor = Mat(imd.size(), CV_8UC3, Scalar(0,0,0));
+    Mat imcenters = Mat(imd.size(), CV_8UC3, Scalar(0,0,0));
+    imreg = labeling(imd, nb_leds);
+    imcolor = coloring(imreg, *nb_leds);
+
+    if(*nb_leds != 3){
+        cout << "frame non correcte, nombre de leds incorrect" << endl;
+        exit(EXIT_FAILURE);    
+    }
+    else{
+        //locating the groups of LEDs
+        vector<Metabot*>retrievedM;
+        imcenters = locating(imreg, cross, *nb_leds, &retrievedM);
+        addMetabot(_currentNb,retrievedM[0]->getPositionX(),retrievedM[0]->getPositionY(),retrievedM[0]->getAngle());
+        cout << ">>>> bot " << _currentNb-1 << " initialisé" << endl;
+    }
+*/
+        addMetabot(_currentNb,125.,80.,56.);
+        cout << ">>>> bot " << _currentNb-1 << " initialisé" << endl;
 }
 
 void Scene::showFrame() {
@@ -141,12 +169,14 @@ void Scene::treatFrame() {
 
     int* nb_leds = new int(0);
 
-    Mat test = imread("../img/test.png", 0);
+    Mat frame;
+    //cv::cvtColor(_camera->getCurrentFrame(), frame, cv::COLOR_BGR2GRAY);
+    frame = imread("../img/test.png", 0);
 
     //image processing to get a clean frame
     Mat cross = makecross(3,3);
-    Mat imd = Mat(test.size(), CV_8UC1);
-    imd = thresholding(test, THRESHOLDING);
+    Mat imd = Mat(frame.size(), CV_8UC1);
+    imd = thresholding(frame, THRESHOLDING);
     imd = erosion(imd, EROSION);
     imd = dilatation(imd, DILATION);
     Mat imreg =  Mat(imd.size(), CV_8UC1);
@@ -157,15 +187,10 @@ void Scene::treatFrame() {
 
     //locating the groups of LEDs
     vector<Metabot*>retrievedM;
-
     imcenters = locating(imreg, cross, *nb_leds, &retrievedM);
-    cout << "taille : " << retrievedM.size() << endl;
 
     //associating the Metabots with the group of LEDs
     //compute all the distances
-
-    cout << "plop0" << endl;
-
     Vector<struct possiblePos>possibilities;
     for(int i =0; i< _nbMetabots ; i++) {
         for(int j =0; j< retrievedM.size() ; j++) {
@@ -181,13 +206,11 @@ void Scene::treatFrame() {
     //sort the distances
     sort(possibilities.begin(), possibilities.end(), compareMetabots);
 
-
     //treat possibilities
     int treatedBots = 0;
     int k = 0;
     int nbPossi = possibilities.size();
     while( (treatedBots < _nbMetabots) || k < nbPossi){
-
         struct possiblePos p = possibilities[k];
         if(!p.m1->getIsPresent() && !p.m2->getIsPresent()){
             p.m1->updateMetabot(p.m2->getPositionX(),p.m2->getPositionY(),p.m2->getAngle());
