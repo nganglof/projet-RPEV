@@ -27,6 +27,7 @@ public:
     float getPositionX();
     float getPositionY();
     float getAngle();
+    int getId();
     string toString();
     void setIsPresent(bool present);
     bool getIsPresent();

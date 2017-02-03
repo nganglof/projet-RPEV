@@ -163,7 +163,10 @@ void Scene::treatFrame() {
 
     //associating the Metabots with the group of LEDs
     //compute all the distances
-   /* Vector<struct possiblePos>possibilities;
+
+    cout << "plop0" << endl;
+
+    Vector<struct possiblePos>possibilities;
     for(int i =0; i< _nbMetabots ; i++) {
         for(int j =0; j< retrievedM.size() ; j++) {
             struct possiblePos p;
@@ -171,11 +174,13 @@ void Scene::treatFrame() {
             p.m1 = _metabots[i];
             p.m2 = retrievedM[j];
             p.m2->setIsPresent(0);
+            possibilities.push_back(p);
         }
     }
 
     //sort the distances
     sort(possibilities.begin(), possibilities.end(), compareMetabots);
+
 
     //treat possibilities
     int treatedBots = 0;
@@ -190,7 +195,11 @@ void Scene::treatFrame() {
             p.m2->setIsPresent(1);
         }
         k++;
-    }*/
+    }
+
+    for(int i =0; i< _metabots.size() ; i++) {
+        cout << " metabot " << _metabots[i]->getId() << " angle="<< _metabots[i]->getAngle() << " (" << _metabots[i]->getPositionX() << ";" << _metabots[i]->getPositionY() << ")" <<endl;
+    }
 }
 
 void Scene::initCamera() {

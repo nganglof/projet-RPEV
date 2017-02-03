@@ -14,6 +14,10 @@ bool Metabot::getIsPresent(){
 	return _isPresent;
 }
 
+int Metabot::getId(){
+	return _id;
+}
+
 float Metabot::getPositionX(){
 	return _posx;
 }
@@ -46,7 +50,7 @@ float Metabot::getDistance(Metabot* m){
 }
 
 void Metabot::updateMetabot(float posx, float posy, float angle){
-	_posy = posx;
+	_posx = posx;
 	_posy = posy;
 	_angle = angle;
 	_isPresent = 1;
