@@ -11,7 +11,7 @@ Camera::Camera() {
 
 int Camera::initFlux() {
 
-    _capture = VideoCapture(1);
+    _capture = VideoCapture(0);
     if(!_capture.isOpened()) {
         printf("Ouverture du flux vidéo impossible\n");
         return EXIT_FAILURE;

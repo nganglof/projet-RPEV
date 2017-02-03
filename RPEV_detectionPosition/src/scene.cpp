@@ -119,8 +119,7 @@ void Scene::initScene() {
 
 void Scene::initMetabot() {
 
-    //todo
-/*
+
     int* nb_leds = new int(0);
     Mat frame;
     cv::cvtColor(_camera->getCurrentFrame(), frame, cv::COLOR_BGR2GRAY);
@@ -148,9 +147,9 @@ void Scene::initMetabot() {
         addMetabot(_currentNb,retrievedM[0]->getPositionX(),retrievedM[0]->getPositionY(),retrievedM[0]->getAngle());
         cout << ">>>> bot " << _currentNb-1 << " initialisé" << endl;
     }
-*/
-        addMetabot(_currentNb,125.,80.,56.);
-        cout << ">>>> bot " << _currentNb-1 << " initialisé" << endl;
+
+    //addMetabot(_currentNb,125.,80.,56.);
+    //cout << ">>>> bot " << _currentNb-1 << " initialisé" << endl;
 }
 
 void Scene::showFrame() {
@@ -170,8 +169,8 @@ void Scene::treatFrame() {
     int* nb_leds = new int(0);
 
     Mat frame;
-    //cv::cvtColor(_camera->getCurrentFrame(), frame, cv::COLOR_BGR2GRAY);
-    frame = imread("../img/test.png", 0);
+    cv::cvtColor(_camera->getCurrentFrame(), frame, cv::COLOR_BGR2GRAY);
+    //frame = imread("../img/test.png", 0);
 
     //image processing to get a clean frame
     Mat cross = makecross(3,3);

@@ -61,8 +61,9 @@ void startDetection() {
             mainscene->processNewFrame();
             if(totalTime >= FRAMERATE) {
                 mainscene->treatFrame();
-                zmq::message_t message(mainscene->getPositions().size());
+                zmq::message_t message(mainscene->getPositions().size() +1);
                 snprintf ((char *) message.data(), mainscene->getPositions().size() ,"%s", (char*)mainscene->getPositions().c_str());
+
                 publisher.send(message);
                 gettimeofday(&previousTime, NULL);
                 startTime = (previousTime.tv_sec * 1000) + (previousTime.tv_usec / 1000);
