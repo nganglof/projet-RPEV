@@ -61,8 +61,6 @@ void startDetection() {
             mainscene->processNewFrame();
             if(totalTime >= FRAMERATE) {
                 mainscene->treatFrame();
-
-
                 zmq::message_t message(mainscene->getPositions().size());
                 snprintf ((char *) message.data(), mainscene->getPositions().size() ,"%s", (char*)mainscene->getPositions().c_str());
                 publisher.send(message);

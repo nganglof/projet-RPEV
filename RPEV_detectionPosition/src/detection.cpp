@@ -223,8 +223,17 @@ locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*>* metabots
     float posx = (ledbars[i].led1.x + ledbars[i].led3.x) / 2; // considering that the middle of the robot is at the same distance from external leds
     float posy = (ledbars[i].led1.y + ledbars[i].led3.y) / 2; // same
     float angle;
-    if(ledbars[i].led1.x != ledbars[i].led3.x)
-      angle = atan(((float)ledbars[i].led1.y - (float)ledbars[i].led3.y) / ((float)ledbars[i].led1.x - (float)ledbars[i].led3.x))*180.0/M_PI;
+    if(ledbars[i].led1.x != ledbars[i].led3.x){
+      angle = atan(fabs((float)ledbars[i].led1.y - (float)ledbars[i].led3.y) / fabs((float)ledbars[i].led1.x - (float)ledbars[i].led3.x))*180.0/M_PI;
+      if(ledbars[i].led1.x < ledbars[i].led3.x){
+        if(ledbars[i].led1.y > ledbars[i].led3.y){
+          angle -= 180.0;
+        }
+        else{
+          angle += 180.0;
+        }
+      }
+    }
     else
       angle = (ledbars[i].led1.y > ledbars[i].led3.y) ? 90 : -90;
     Metabot* newmetabot = new Metabot(-1, posx, posy, angle);

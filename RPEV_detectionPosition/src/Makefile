@@ -3,7 +3,7 @@ ROOT=.
 
 CC = g++
 CFLAGS  = -Wall -Wextra -I$(ROOT) -I$(OPENCV)/include
-LDFLAGS = -L/usr/lib/x86_64-linux-gnu -lopencv_core -lopencv_imgproc -lopencv_highgui 
+LDFLAGS = -L/usr/lib/x86_64-linux-gnu -lopencv_core -lopencv_imgproc -lopencv_highgui -lzmq
 
 execs     = main
 
