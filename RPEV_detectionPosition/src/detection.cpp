@@ -115,7 +115,7 @@ coloring(Mat ims, const int nb_leds)
 }
 
 Mat
-locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*> metabots)
+locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*>* metabots)
 {
   int rows  = ims.rows;
   int cols  = ims.cols;
@@ -126,6 +126,8 @@ locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*> metabots)
   int root_max_y[nb_leds];
 
   struct led leds[nb_leds];
+
+  //cout << "yolo \n";
 
   for (int root = 0; root < nb_leds; root++){
     root_min_x[root] = cols;
@@ -157,6 +159,7 @@ locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*> metabots)
     leds[root].id = root;
     leds[root].x = (root_min_x[root]+root_max_x[root])/2;
     leds[root].y = (root_min_y[root]+root_max_y[root])/2;
+    cout << leds[root].x << " "<<leds[root].y;
     imd = draw_on_top(centershape, imd, leds[root].x, leds[root].y, 200, 0, 0);
   }
 
@@ -187,9 +190,11 @@ locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*> metabots)
 
   for (int i = 0; i < nb_leds; i++){
     int j = 0;
+    cout <<"led "<<i<<" led coord "<<leds[i].x<<leds[i].y<<endl;
     while (j < ledbars.size() && ledbars[j].led1.id != i && ledbars[j].led2.id != i && ledbars[j].led3.id != i)
       j++;
     // if the LED i doesn't appear in the 'ledbars' yet
+    cout <<"j = "<<j<<" ledbars.size() = "<<ledbars.size()<<endl;
     if (j == ledbars.size()){
       struct ledbar newledbar;
       if (closest_leds[closest_leds[i][0].id][0].id != i){
@@ -228,7 +233,9 @@ locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*> metabots)
     else
       angle = (ledbars[i].led1.y > ledbars[i].led3.y) ? 90 : -90;
     Metabot* newmetabot = new Metabot(-1, posx, posy, angle);
-    metabots.push_back(newmetabot);
+    metabots->push_back(newmetabot);
+    cout << newmetabot->toString() <<  endl;
+
   }
 
   return(imd);

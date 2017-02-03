@@ -46,7 +46,7 @@ coloring(Mat ims, const int nb_leds);
 // returns an image with 'centershape' where LEDs are detected and circles around detected robots
 // saves the positions and angles of robots in the empty vector 'metabots'
 Mat
-locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*> metabots);
+locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*>* metabots);
 
 /*************************************************************************************
                     SUBFUNCTIONS USED IN detection.cpp ONLY

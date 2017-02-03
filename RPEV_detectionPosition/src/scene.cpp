@@ -141,10 +141,12 @@ void Scene::treatFrame() {
 
     int* nb_leds = new int(0);
 
+    Mat test = imread("../img/test.png", 0);
+
     //image processing to get a clean frame
     Mat cross = makecross(3,3);
-    Mat imd = Mat(_camera->getCurrentFrame().size(), CV_8UC1);
-    imd = thresholding(_camera->getCurrentFrame(), THRESHOLDING);
+    Mat imd = Mat(test.size(), CV_8UC1);
+    imd = thresholding(test, THRESHOLDING);
     imd = erosion(imd, EROSION);
     imd = dilatation(imd, DILATION);
     Mat imreg =  Mat(imd.size(), CV_8UC1);
@@ -155,11 +157,13 @@ void Scene::treatFrame() {
 
     //locating the groups of LEDs
     vector<Metabot*>retrievedM;
-    imcenters = locating(imreg, cross, *nb_leds, retrievedM);
+
+    imcenters = locating(imreg, cross, *nb_leds, &retrievedM);
+    cout << "taille : " << retrievedM.size() << endl;
 
     //associating the Metabots with the group of LEDs
     //compute all the distances
-    Vector<struct possiblePos>possibilities;
+   /* Vector<struct possiblePos>possibilities;
     for(int i =0; i< _nbMetabots ; i++) {
         for(int j =0; j< retrievedM.size() ; j++) {
             struct possiblePos p;
@@ -186,7 +190,7 @@ void Scene::treatFrame() {
             p.m2->setIsPresent(1);
         }
         k++;
-    }
+    }*/
 }
 
 void Scene::initCamera() {
