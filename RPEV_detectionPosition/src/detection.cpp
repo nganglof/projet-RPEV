@@ -220,15 +220,15 @@ locating(Mat ims, Mat centershape, const int nb_leds, vector<Metabot*> metabots)
   }
 
   for (int i = 0; i < ledbars.size(); i++){
-    float posx = (ledbar[i].led1.x + ledbar[i].led3.x) / 2; // considering that the middle of the robot is at the same distance from external leds
-    float posy = (ledbar[i].led1.y + ledbar[i].led3.y) / 2; // same
+    float posx = (ledbars[i].led1.x + ledbars[i].led3.x) / 2; // considering that the middle of the robot is at the same distance from external leds
+    float posy = (ledbars[i].led1.y + ledbars[i].led3.y) / 2; // same
     float angle;
-    if(ledbar[i].led1.x != ledbar[i].led3.x)
-      angle = atan((ledbar[i].led1.y - ledbar[i].led3.y) / (ledbar[i].led1.x - ledbar[i].led3.x))*180/M_PI;
+    if(ledbars[i].led1.x != ledbars[i].led3.x)
+      angle = atan((ledbars[i].led1.y - ledbars[i].led3.y) / (ledbars[i].led1.x - ledbars[i].led3.x))*180/M_PI;
     else
-      angle = (ledbar[i].led1.y > ledbar[i].led3.y) ? 90 : -90;
+      angle = (ledbars[i].led1.y > ledbars[i].led3.y) ? 90 : -90;
     Metabot* newmetabot = new Metabot(-1, posx, posy, angle);
-    metabots.pushback(newmetabot);
+    metabots.push_back(newmetabot);
   }
 
   return(imd);

@@ -9,6 +9,7 @@
 #include "transformations.hpp"
 #include "detection.hpp"
 #include <string>
+#include <vector>
 
 using namespace std;
 using namespace cv;
@@ -18,7 +19,7 @@ class Scene
 
 private:
     Camera* _camera;
-    Vector<Metabot*> _metabots;
+    vector<Metabot*> _metabots;
     int _nbMetabots;
     int _currentNb;
 

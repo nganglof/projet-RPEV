@@ -154,8 +154,8 @@ void Scene::treatFrame() {
     imcolor = coloring(imreg, *nb_leds);
 
     //locating the groups of LEDs
-    Vector<Metabot*>retrievedM;
-    imcenters = locating(imreg, cross, *nb_leds);
+    vector<Metabot*>retrievedM;
+    imcenters = locating(imreg, cross, *nb_leds, retrievedM);
 
     //associating the Metabots with the group of LEDs
     //compute all the distances

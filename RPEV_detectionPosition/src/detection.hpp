@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "transformations.hpp"
+#include "metabot.hpp"
 
 using namespace cv;
 
